@@ -2,9 +2,9 @@ import os
 import argparse
 from pathlib import Path
 
-from lib.parser import parseInput
-from lib.printer import prettyPrintOutput
-
+from lib.parser import Parser
+from lib.table import Table
+from lib.config import Config
 
 def main():
     argparser = argparse.ArgumentParser(
@@ -30,16 +30,16 @@ def main():
         default=Path(os.environ.get('DATA_OUTPUT_CSV', './data/output.csv')),
         help='Path to output CSV file (default: ./data/output.csv)',
     )
-
+    
     args = argparser.parse_args()
 
     if 'parse' in args.actions:
         print('[*] Running Gaya Market Caculator...')
-        parseInput(args.input, args.output)
+        Parser(inputFilename=args.input, outputFilename=args.output, config=Config).parse()
         print('[*] Finished running GayaPriceCalculator')
 
     if 'print' in args.actions:
-        prettyPrintOutput(args.output)
+        Table(inputFilename=args.output).print()
     
     return 0
 
